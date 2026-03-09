@@ -4,7 +4,6 @@ ModernMapMarkers_Locale:RegisterZones("deDE", {
     -- Continent names
     ["Kalimdor"]             = "Kalimdor",
     ["Eastern Kingdoms"]     = "Östliche Königreiche",
-    -- Zone names used as keys in MarkerData.lua
     ["Ashenvale"]            = "Eschental",
     ["Azshara"]              = "Azshara",
     ["Badlands"]             = "Ödland",
