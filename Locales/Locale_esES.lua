@@ -1,6 +1,4 @@
----
 --- Locale_esES.lua - Spanish Localization for ModernMapMarkers
----
 
 ModernMapMarkers_Locale:RegisterZones("esES", {
     -- Continent names
