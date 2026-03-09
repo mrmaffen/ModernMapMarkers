@@ -1,5 +1,5 @@
 # ModernMapMarkers for TurtleWoW
-Places markers on the world map to show the locations of dungeons, raids, world bosses, boats, zeppelins, and trams.
+Places markers on the world map to show the locations of dungeons, raids, world bosses, boats, zeppelins, and trams. Now supports esES, deDE, ptBR, and zhCN clients. ruRU coming later.
 
 **Features:**
 
