@@ -4,6 +4,9 @@ MMM.Data = {}
 MMM.ZoneMarkers = {}
 MMM.FlatDropdownData = nil
 
+-- Localization shorthand
+local L = ModernMapMarkers_Locale
+
 -- Filter constants
 local ALL_TYPES = { "DUNGEON", "RAID", "WORLDBOSS", "BOAT", "ZEPPELIN", "TRAM" }
 
@@ -17,6 +20,11 @@ MMM.filters = {
     WORLDBOSS = true,
     FACTION   = "ALL"
 }
+
+-- Dirty-check state for RefreshMarkers
+local lastContinent = nil
+local lastZone      = nil
+local forceRefresh  = false
 
 -- Textures
 local TEX_BASE = "Interface\\AddOns\\ModernMapMarkers\\Textures\\"
@@ -43,6 +51,7 @@ local CANONICAL_ZONE = {
     ["Upper Blackrock Spire"] = "Burning Steppes",
     ["Blackwing Lair"]        = "Burning Steppes",
     ["Molten Core"]           = "Burning Steppes",
+    ["Stormwind Vault"]       = "Stormwind City",
 }
 
 -- Data Parsing
@@ -97,7 +106,7 @@ function ModernMapMarkers_GetFlatData()
     local seenNames = {}
 
     for _, data in ipairs(MMM.Data) do
-        if data.type == "DUNGEON" or data.type == "RAID" then
+        if data.type == "DUNGEON" or data.type == "RAID" or data.type == "WORLDBOSS" then
             local baseName = data.name or ""
 
             local dashIndex = string.find(baseName, " %- ")
@@ -130,7 +139,6 @@ end
 
 -- Drawing Logic
 function MMM:RefreshMarkers()
-    for _, marker in ipairs(self.markers) do marker:Hide() end
     if not WorldMapFrame:IsVisible() then return end
 
     self:BuildData()
@@ -138,16 +146,37 @@ function MMM:RefreshMarkers()
     local currentContinent = GetCurrentMapContinent()
     local currentZone      = GetCurrentMapZone()
 
-    if currentContinent == 0 or currentZone == 0 then return end
+    -- Dirty-check: skip full redraw if zone hasn't changed and no force refresh
+    if not forceRefresh
+       and currentContinent == lastContinent
+       and currentZone == lastZone then
+        return
+    end
+
+    lastContinent = currentContinent
+    lastZone      = currentZone
+    forceRefresh  = false
+
+    if currentContinent == 0 or currentZone == 0 then
+        self:HideAllMarkers()
+        return
+    end
 
     local zoneNames      = ZONE_CACHE[currentContinent]
     local currentZoneName = zoneNames and zoneNames[currentZone]
-    if not currentZoneName then return end
+    if not currentZoneName then
+        self:HideAllMarkers()
+        return
+    end
 
-    local zoneMarkers = MMM.ZoneMarkers[currentContinent] and MMM.ZoneMarkers[currentContinent][currentZoneName]
+    -- Translate localized zone name to English key used in MarkerData
+    local englishZoneName = L:GetEnglishZoneName(currentZoneName)
+
+    local zoneMarkers = MMM.ZoneMarkers[currentContinent] and MMM.ZoneMarkers[currentContinent][englishZoneName]
+
+    local markerIndex = 0
 
     if zoneMarkers then
-        local markerIndex = 1
         for _, data in ipairs(zoneMarkers) do
             
             local showMarker = (MMM.filters[data.type] == true)
@@ -162,6 +191,7 @@ function MMM:RefreshMarkers()
             end
 
             if showMarker then
+                markerIndex = markerIndex + 1
                 local marker = self:GetOrCreateMarker(markerIndex)
 
                 -- Sizing
@@ -186,7 +216,7 @@ function MMM:RefreshMarkers()
                 end
 
                 -- Metadata
-                marker.name        = data.name
+                marker.name        = L:GetLocalizedMarkerName(data.name)
                 marker.description = data.description
                 marker.markerType  = data.type
                 marker.atlasID     = data.atlasID
@@ -194,10 +224,31 @@ function MMM:RefreshMarkers()
                 marker.zoneName    = data.zoneName
 
                 marker:Show()
-                markerIndex = markerIndex + 1
             end
         end
     end
+
+    -- Hide any excess markers from the previous zone
+    self:HideMarkersFrom(markerIndex + 1)
+end
+
+-- Hide all markers in the pool
+function MMM:HideAllMarkers()
+    self:HideMarkersFrom(1)
+end
+
+-- Hide markers from startIndex onwards
+function MMM:HideMarkersFrom(startIndex)
+    for i = startIndex, table.getn(self.markers) do
+        if self.markers[i] then
+            self.markers[i]:Hide()
+        end
+    end
+end
+
+-- Invalidate dirty-check so next RefreshMarkers does a full redraw
+function MMM:InvalidateCache()
+    forceRefresh = true
 end
 
 -- AtlasTW Integration
@@ -219,7 +270,7 @@ function MMM:OnMarkerClick(marker)
                 AtlasTW.Refresh()
             end
         else
-            DEFAULT_CHAT_FRAME:AddMessage("|cff7fff7fModernMapMarkers:|r Atlas-TW is not installed or enabled.")
+            DEFAULT_CHAT_FRAME:AddMessage("|cff7fff7fModernMapMarkers:|r " .. L:GetLocalizedMarkerName("Atlas-TW is not installed or enabled."))
         end
     end
 end
@@ -244,13 +295,14 @@ function MMM:GetOrCreateMarker(index)
 
             if this.description then
                 if this.markerType == "DUNGEON" or this.markerType == "RAID" or this.markerType == "WORLDBOSS" then
-                    WorldMapTooltip:AddLine("Level: " .. this.description, 1, 1, 1, 1)
+                    local lvlLabel = L:GetLocalizedMarkerName("Level") or "Level"
+                    WorldMapTooltip:AddLine(lvlLabel .. ": " .. this.description, 1, 1, 1, 1)
                 elseif this.description == "Alliance" then
-                    WorldMapTooltip:AddLine(this.description, 0.0, 0.47, 1.0, 1)
+                    WorldMapTooltip:AddLine(L:GetLocalizedMarkerName("Alliance"), 0.0, 0.47, 1.0, 1)
                 elseif this.description == "Horde" then
-                    WorldMapTooltip:AddLine(this.description, 1.0, 0.0, 0.0, 1)
+                    WorldMapTooltip:AddLine(L:GetLocalizedMarkerName("Horde"), 1.0, 0.0, 0.0, 1)
                 else
-                    WorldMapTooltip:AddLine(this.description, 1, 1, 1, 1)
+                    WorldMapTooltip:AddLine(L:GetLocalizedMarkerName(this.description), 1, 1, 1, 1)
                 end
             end
             WorldMapTooltip:Show()
@@ -272,16 +324,24 @@ function ModernMapMarkers_SetFilter(key, state)
     else
         MMM.filters[key] = state
     end
+    MMM:InvalidateCache()
     MMM:RefreshMarkers()
 end
 
 function ModernMapMarkers_SetFactionFilter(factionStr)
     MMM.filters.FACTION = factionStr
+    MMM:InvalidateCache()
     MMM:RefreshMarkers()
 end
 
 function MMM:GetZoneIndex(continentID, zoneName)
     local zones = ZONE_CACHE[continentID] or {}
+    -- zoneName is English (from MarkerData), ZONE_CACHE has localized names
+    local localizedName = L:GetLocalizedZoneName(zoneName)
+    for i, name in ipairs(zones) do
+        if name == localizedName then return i end
+    end
+    -- Fallback: try direct match (for enUS or untranslated zones)
     for i, name in ipairs(zones) do
         if name == zoneName then return i end
     end
@@ -305,6 +365,7 @@ function ModernMapMarkers_FindMarker(dataIndex)
         end
     end
 
+    MMM:InvalidateCache()
     MMM:RefreshMarkers()
 end
 
@@ -322,10 +383,18 @@ MMM:SetScript("OnEvent", function()
             for k, v in pairs(ModernMapMarkersDB.filters) do
                 MMM.filters[k] = v
             end
+        else
+            -- First load: auto-detect player faction for transport filter
+            local faction = UnitFactionGroup("player")
+            if faction == "Alliance" or faction == "Horde" then
+                MMM.filters.FACTION = faction
+            end
         end
 
+        L:Initialize()
         MMM:CacheZones()
         MMM:BuildData()
+        MMM:InvalidateCache()
         MMM:RefreshMarkers()
 
     elseif event == "PLAYER_LOGOUT" then
