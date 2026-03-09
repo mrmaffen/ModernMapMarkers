@@ -9,7 +9,7 @@ Places markers on the world map to show the locations of dungeons, raids, world 
 
 **World Boss Markers –** Locations of world bosses are placed on the map.
 
-**Customizable –** Toggle marker types within the dropdown UI on the world map.
+**Customizable –** Toggle marker types within the dropdown UI on the world map, and use **/mmm** to toggle the visibility of the dropdown menus. 
 
 **Atlas Integration –** If you use [AtlasTW](https://github.com/byCFM2/Atlas-TW), you can click markers to open their respective pages in Atlas-TW.
 
