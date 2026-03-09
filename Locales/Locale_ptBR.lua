@@ -48,6 +48,7 @@ ModernMapMarkers_Locale:RegisterMarkers("ptBR", {
     ["Crescent Grove"]                      = "Bosque do Crescente",
     ["Maraudon"]                            = "Maraudon",
     ["Ragefire Chasm"]                      = "Cavernas Ragefire",
+    ["Dire Maul"]                           = "Gládio Cruel",
     ["Dire Maul - East"]                    = "Gládio Cruel - Leste",
     ["Dire Maul - North"]                   = "Gládio Cruel - Norte",
     ["Dire Maul - West"]                    = "Gládio Cruel - Oeste",
@@ -64,6 +65,7 @@ ModernMapMarkers_Locale:RegisterMarkers("ptBR", {
     ["Lower Blackrock Spire"]               = "Pico da Rocha Negra Inferior",
     ["Upper Blackrock Spire"]               = "Pico da Rocha Negra Superior",
     ["Karazhan Crypt"]                      = "Cripta Karazhan",
+    ["Scarlet Monastery"]                   = "Monastério Scarlet",
     ["Scarlet Monastery - Armory"]          = "Monastério Scarlet - Arsenal",
     ["Scarlet Monastery - Cathedral"]       = "Monastério Scarlet - Catedral",
     ["Scarlet Monastery - Graveyard"]       = "Monastério Scarlet - Cemitério",
@@ -79,6 +81,7 @@ ModernMapMarkers_Locale:RegisterMarkers("ptBR", {
     ["Gilneas City"]                        = "Cidade de Gilneas",
     ["The Sunken Temple"]                   = "O Templo Abaixo d'Água",
     ["Dragonmaw Retreat"]                   = "Refúgio Presa do Dragão",
+    ["Uldaman"]                             = "Uldaman",
     ["Uldaman - Main Entrance"]             = "Uldaman - Entrada Principal",
     ["Uldaman - Back Entrance"]             = "Uldaman - Entrada Traseira",
 
@@ -95,6 +98,7 @@ ModernMapMarkers_Locale:RegisterMarkers("ptBR", {
     ["Zul'Gurub"]              = "Zul'Gurub",
 
     -- World Bosses
+    ["Emerald Dragon"]                      = "Dragão Esmeralda",
     ["Emerald Dragon - Spawn Point 1 of 4"] = "Dragão Esmeralda - Ponto 1 de 4",
     ["Emerald Dragon - Spawn Point 2 of 4"] = "Dragão Esmeralda - Ponto 2 de 4",
     ["Emerald Dragon - Spawn Point 3 of 4"] = "Dragão Esmeralda - Ponto 3 de 4",
