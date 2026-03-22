@@ -127,6 +127,7 @@ local CANONICAL_ZONE = {
     ["Blackwing Lair"]        = "Burning Steppes",
     ["Molten Core"]           = "Burning Steppes",
     ["Stormwind Vault"]       = "Stormwind City",
+    ["Timbermaw Hold"]        = "Azshara",
 }
 
 -- Data Parsing
