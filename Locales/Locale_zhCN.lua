@@ -85,8 +85,8 @@ ModernMapMarkers_Locale:RegisterMarkers("zhCN", {
     ["Uldaman"]                             = "奥达曼",
     ["Uldaman - Main Entrance"]             = "奥达曼 - 主入口",
     ["Uldaman - Back Entrance"]             = "奥达曼 - 后入口",
-    ["Frostmane Hollow"]                    = "Frostmane Hollow",
-    ["Windhorn Canyon"]                     = "Windhorn Canyon",
+    ["Frostmane Hollow"]                    = "霜鬃谷",
+    ["Windhorn Canyon"]                     = "风角峡谷",
 
     -- Raids
     ["Onyxia's Lair"]          = "奥妮克希亚的巢穴",
@@ -99,7 +99,7 @@ ModernMapMarkers_Locale:RegisterMarkers("zhCN", {
     ["Tower of Karazhan"]      = "卡拉赞之塔",
     ["Naxxramas"]              = "纳克萨玛斯",
     ["Zul'Gurub"]              = "祖尔格拉布",
-    ["Timbermaw Hold"]         = "Timbermaw Hold",
+    ["Timbermaw Hold"]         = "木喉要塞",
 
     -- World Bosses
     ["Taerar"]                 = "塔拉尔",
