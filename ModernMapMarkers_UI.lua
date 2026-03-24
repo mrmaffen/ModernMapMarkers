@@ -200,7 +200,7 @@ function MMM_GUI.InitializeWorldMapControls()
     UIDropDownMenu_Initialize(findFrame, function() end)
 
     -- Find Marker Panel
-    local PANEL_WIDTH = 220
+    local PANEL_WIDTH = 235
     local ROW_HEIGHT = 16
     local MAX_VISIBLE_ROWS = 12
     local BUTTON_HEIGHT = 20
@@ -391,12 +391,12 @@ function MMM_GUI.InitializeWorldMapControls()
                 row.nameText:SetText(localizedName)
 
                 if data.description then
-                    row.lvlText:SetText(lvlLabel .. " " .. data.description)
+                    row.lvlText:SetText(data.description)
                 else
                     row.lvlText:SetText("")
                 end
 
-                row.nameText:SetWidth(row:GetWidth() - row.lvlText:GetStringWidth() - 16)
+                row.nameText:SetWidth(row:GetWidth() - row.lvlText:GetStringWidth())
 
                 row.dataID = data.id
                 row:SetScript("OnClick", function()
