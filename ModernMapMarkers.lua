@@ -122,8 +122,7 @@ end
 -- Map multi-entrance dungeons to a single zone
 local CANONICAL_ZONE = {
     ["Blackrock Depths"]      = "Burning Steppes",
-    ["Lower Blackrock Spire"] = "Burning Steppes",
-    ["Upper Blackrock Spire"] = "Burning Steppes",
+    ["Blackrock Spire"]       = "Burning Steppes",
     ["Blackwing Lair"]        = "Burning Steppes",
     ["Molten Core"]           = "Burning Steppes",
     ["Stormwind Vault"]       = "Stormwind City",
@@ -184,11 +183,6 @@ function ModernMapMarkers_GetFlatData()
     for _, data in ipairs(MMM.Data) do
         if data.type == "DUNGEON" or data.type == "RAID" or data.type == "WORLDBOSS" then
             local baseName = data.name or ""
-
-            local dashIndex = string.find(baseName, " %- ")
-            if dashIndex then
-                baseName = string.sub(baseName, 1, dashIndex - 1)
-            end
 
             local existingIndex = seenNames[baseName]
             if not existingIndex then
