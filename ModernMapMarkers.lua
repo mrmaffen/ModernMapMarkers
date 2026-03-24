@@ -157,6 +157,7 @@ function MMM:BuildData()
                     y           = m.y,
                     name        = m.name,
                     type        = typeUpper,
+                    mask        = m.mask,
                     description = m.info,
                     id          = index
                 }
@@ -310,7 +311,7 @@ function MMM:RefreshMarkers()
                 end
 
                 -- Metadata
-                marker.name        = L:GetLocalizedMarkerName(data.name)
+                marker.name        = L:GetLocalizedMarkerName(data.name, data.type, data.mask)
                 marker.nameEN      = data.name
                 marker.description = data.description
                 marker.markerType  = data.type

@@ -27,7 +27,10 @@ function ModernMapMarkers_Locale:RegisterMarkers(locale, tbl)
 end
 
 function ModernMapMarkers_Locale:Initialize()
-    detectedLocale = GetLocale() or "enUS"
+    detectedLocale = GetLocale()
+    if not detectedLocale or detectedLocale == "enGB" then
+        detectedLocale = "enUS"
+    end
 
     local data = LocaleData[detectedLocale]
 
@@ -47,31 +50,82 @@ end
 --- Given a localized zone name (from GetMapZones), return the English key
 --- used in MarkerData.lua.  Returns the input unchanged for enUS or unknown names.
 function ModernMapMarkers_Locale:GetEnglishZoneName(localizedName)
-    if ReverseZones and ReverseZones[localizedName] then
-        return ReverseZones[localizedName]
+    local zoneId = MMM_PfDBHelper:GetZoneId(localizedName, detectedLocale)
+    if not zoneId then
+        return localizedName
     end
-    return localizedName
+    local zoneName = MMM_PfDBHelper:GetZoneName(zoneId, "enUS")
+    --self:Print("GetEnglishZoneName - localizedName: " .. tostring(localizedName) .. " --> " .. tostring(zoneName))
+    return zoneName
 end
 
 --- Given an English zone name, return the localized display name.
 --- Falls back to the English name if no translation exists.
 function ModernMapMarkers_Locale:GetLocalizedZoneName(englishName)
-    if ActiveZones and ActiveZones[englishName] then
-        return ActiveZones[englishName]
+    local zoneId = MMM_PfDBHelper:GetZoneId(englishName, "enUS")
+    if not zoneId then
+        return englishName
     end
-    return englishName
+    local zoneName = MMM_PfDBHelper:GetZoneName(zoneId, detectedLocale)
+    --self:Print("GetLocalizedZoneName - englishName: " .. tostring(englishName) .. " --> " .. tostring(zoneName))
+    return zoneName
 end
 
 --- Given an English marker/instance name, return the localized display name.
 --- Falls back to the English name if no translation exists.
-function ModernMapMarkers_Locale:GetLocalizedMarkerName(englishName)
-    if ActiveMarkers and ActiveMarkers[englishName] then
-        return ActiveMarkers[englishName]
+function ModernMapMarkers_Locale:GetLocalizedMarkerName(englishName, type, mask)
+    --self:Print("GetLocalizedMarkerName - englishName: " .. tostring(englishName) .. ", type: " .. tostring(type) .. ", mask: " .. tostring(mask))
+    local localizedName = nil
+    if not mask then -- see if we automatically need to choose a mask because of the type
+        if type == "BOAT" then
+            mask = "Boat to %s"
+        elseif type == "ZEPP" or type == "ZEPPELIN" then
+            mask = "Zeppelin to %s"
+        elseif type == "TRAM" then
+            mask = "Tram to %s"
+        end
     end
-    return englishName
+    if ActiveMarkers then
+        local englishNameEnglishMask = englishName
+        if mask then -- apply non-localized english mask if it exists
+            englishNameEnglishMask = string.format(mask, englishName)
+        end
+        if ActiveMarkers[englishNameEnglishMask] then
+            return ActiveMarkers[englishNameEnglishMask] -- we have a custom translation for this string, use it
+        end
+    end
+    if type == "WORLDBOSS" then -- worldboss is the only type that is a unit name
+        local unitId = MMM_PfDBHelper:GetUnitId(englishName, "enUS") -- first we get the unit id from pfDB
+        if unitId then
+            localizedName = MMM_PfDBHelper:GetUnitName(unitId, detectedLocale) -- now get localized unit name from pfDB
+        end
+    else -- all other types are zone names
+        local zoneId = MMM_PfDBHelper:GetZoneId(englishName, "enUS") -- first we get the zone id from pfDB
+        if zoneId then
+            localizedName = MMM_PfDBHelper:GetZoneName(zoneId, detectedLocale) -- get localized zone name from pfDB
+        end
+    end
+    if not localizedName and ActiveMarkers then -- couldn't find it in zone or unit tables, try to get custom translation from ./Locales
+        localizedName = ActiveMarkers[englishName]
+    end
+    if mask then -- apply mask
+        local localizedMask = mask
+        if ActiveMarkers and ActiveMarkers[mask] then
+            localizedMask = ActiveMarkers[mask] -- we have a localized mask
+        end
+        if localizedName then -- all good. we have a localized name
+            localizedName = string.format(localizedMask, localizedName)
+        else -- second best option. we have no localized name. fallback to english name
+            localizedName = string.format(localizedMask, englishName)
+        end
+    end
+    if not localizedName then -- couldn't find anything anywhere. fall back to original english name
+        localizedName = englishName
+    end
+    return localizedName
 end
 
-function ModernMapMarkers_Locale:GetLocale()
-    return detectedLocale or "enUS"
-
+-- Safe call helper for listener
+function ModernMapMarkers_Locale:Print(msg)
+    DEFAULT_CHAT_FRAME:AddMessage("ModernMapMarkers_Locale: " .. tostring(msg))
 end

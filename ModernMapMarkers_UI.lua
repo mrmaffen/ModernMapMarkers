@@ -387,7 +387,7 @@ function MMM_GUI.InitializeWorldMapControls()
 
             if dataIndex <= totalRows then
                 local data = currentList[dataIndex]
-                local localizedName = L:GetLocalizedMarkerName(data.name)
+                local localizedName = L:GetLocalizedMarkerName(data.name, data.type, data.mask)
                 row.nameText:SetText(localizedName)
 
                 if data.description then
