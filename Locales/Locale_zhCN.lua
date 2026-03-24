@@ -19,9 +19,9 @@ ModernMapMarkers_Locale:RegisterMarkers("zhCN", {
 
     -- Transport masks
     -- %s will get substituted with the destination's localized name
-    ["Boat to %s"]      = "乘船前往 %s",
-    ["Zeppelin to %s"]  = "乘飞艇前往 %s",
-    ["Tram to %s"]      = "地铁前往 %s",
+    ["Boat to %s"]      = "乘船前往%s",
+    ["Zeppelin to %s"]  = "乘飞艇前往%s",
+    ["Tram to %s"]      = "地铁前往%s",
 
     -- Tooltip labels
     ["Level"]    = "等级",

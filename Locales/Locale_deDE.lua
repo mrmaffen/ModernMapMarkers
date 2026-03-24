@@ -16,8 +16,6 @@ ModernMapMarkers_Locale:RegisterMarkers("deDE", {
     ["%s - Back Gate"]      = "%s - Hintertor", -- Stratholme
     ["%s - Horde Entrance"] = "%s - Horde-Eingang", -- Stormwind Vault
     ["%s - Main Entrance"]  = "%s - Haupteingang", -- Uldaman
-    -- Temporary translations because pfQuest's db hasn't caught up with the latest patch yet
-    ["Windhorn Canyon"]     = "Schlucht der heulenden Winde",
 
     -- Transport masks
     -- %s will get substituted with the destination's localized name
