@@ -1,131 +1,117 @@
 MMM_PfDBHelper = {}
 
-local zones_by_name = {}
-local units_by_name = {}
+local by_name = { zones = {}, units = {} }    -- by_name[kind][locale] = { ["Localized Name"] = id, ... }
+local initialized = { zones = {}, units = {} } -- initialized[kind][locale] = true
 
-local zoneIdCache = {}
-local zoneNameCache = {}
-local unitIdCache = {}
-local unitNameCache = {}
-local zoneIdError = {}
-local zoneNameError = {}
-local unitIdError = {}
-local unitNameError = {}
+local idCache   = { zones = {}, units = {} }   -- idCache[kind][locale][name] = id or false
+local nameCache = { zones = {}, units = {} }   -- nameCache[kind][locale][id] = name or false
+
+local idError   = { zones = {}, units = {} }   -- idError[kind][key] = true
+local nameError = { zones = {}, units = {} }   -- nameError[kind][key] = true
 
 function MMM_PfDBHelper:Print(msg)
     DEFAULT_CHAT_FRAME:AddMessage("MMM_PfDBHelper: " .. tostring(msg))
 end
 
-local function ensureZonesLookupTable(locale)
-    zones_by_name = {[locale .. "-turtle"] = {}, [locale] = {}}
-    if MMM_pfDB["zones"][locale] then
-        for id, name in pairs(MMM_pfDB["zones"][locale]) do
-            if type(name) == "string" then zones_by_name[locale][name] = id end
+local function ensureLookupTable(kind, locale)
+    if not kind or not locale then return end
+    if initialized[kind][locale] then return end
+
+    by_name[kind][locale] = by_name[kind][locale] or {}
+
+    local db = MMM_pfDB and MMM_pfDB[kind]
+    -- vanilla locale (e.g. "enUS" or "deDE")
+    if db[locale] then
+        by_name[kind][locale] = by_name[kind][locale] or {}
+        for id, name in pairs(db[locale]) do
+            if type(name) == "string" then
+                by_name[kind][locale][name] = id
+            end
         end
     end
-    if MMM_pfDB["zones"][locale .. "-turtle"] then
-        for id, name in pairs(MMM_pfDB["zones"][locale .. "-turtle"]) do
-            if type(name) == "string" then zones_by_name[locale .. "-turtle"][name] = id end
+
+    -- turtle-specific locale (e.g. "enUS-turtle" or "deDE-turtle")
+    local turtle_locale = locale .. "-turtle"
+    if db[turtle_locale] then
+        by_name[kind][turtle_locale] = by_name[kind][turtle_locale] or {}
+        for id, name in pairs(db[turtle_locale]) do
+            if type(name) == "string" then
+                by_name[kind][turtle_locale][name] = id
+            end
         end
     end
+
+    initialized[kind][locale] = true
 end
 
-local function ensureUnitsLookupTable(locale)
-    units_by_name = {[locale .. "-turtle"] = {}, [locale] = {}}
-    if MMM_pfDB["units"][locale] then
-        for id, name in pairs(MMM_pfDB["units"][locale]) do
-            if type(name) == "string" then units_by_name[locale][name] = id end
+local function getId(kind, text, locale)
+    if not kind or not text or not locale then return nil end
+    ensureLookupTable(kind, locale)
+
+    idCache[kind][locale] = idCache[kind][locale] or {}
+    if idCache[kind][locale][text] then
+        return idCache[kind][locale][text] -- we have a cached value. return it
+    end
+
+    local found = nil
+    if by_name[kind][locale] and by_name[kind][locale][text] then
+        found = by_name[kind][locale][text]
+    else
+        local turtle_locale = locale .. "-turtle"
+        if by_name[kind][turtle_locale] and by_name[kind][turtle_locale][text] then
+            found = by_name[kind][turtle_locale][text]
         end
     end
-    if MMM_pfDB["zones"][locale .. "-turtle"] then
-        for id, name in pairs(MMM_pfDB["units"][locale .. "-turtle"]) do
-            if type(name) == "string" then units_by_name[locale .. "-turtle"][name] = id end
+
+    if not found and idError[kind][text] == nil then
+        idError[kind][text] = true
+        --MMM_PfDBHelper:Print("ERROR getId - kind="..tostring(kind).." text="..tostring(text))
+    end
+
+    idCache[kind][locale][text] = found or false
+    return found
+end
+
+local function getName(kind, id, locale)
+    if not kind or not id or not locale then return nil end
+
+    nameCache[kind][locale] = nameCache[kind][locale] or {}
+    if nameCache[kind][locale][id] then
+        return nameCache[kind][locale][id]
+    end
+
+    local found = nil
+    local db = MMM_pfDB and MMM_pfDB[kind]
+    if db[locale] and db[locale][id] then
+        found = db[locale][id]
+    else
+        local turtle_locale = locale .. "-turtle"
+        if db[turtle_locale] and db[turtle_locale][id] then
+            found = db[turtle_locale][id]
         end
     end
+
+    if not found and nameError[kind][id] == nil then
+        nameError[kind][id] = true
+        --MMM_PfDBHelper:Print("ERROR getName - kind="..tostring(kind).." id="..tostring(id))
+    end
+
+    nameCache[kind][locale][id] = found or false
+    return found
 end
 
 function MMM_PfDBHelper:GetZoneId(zoneText, locale)
-    --self:Print("GetZoneId - zoneText: " .. tostring(zoneText) .. ", locale: " .. tostring(locale))
-    ensureZonesLookupTable(locale)
-    if zoneIdCache[locale] and zoneIdCache[locale][zoneText] ~= nil then return zoneIdCache[locale][zoneText] end
-    if not zones_by_name then return nil end -- sanity checks
-    local zoneId = nil
-    if zones_by_name[locale] and zones_by_name[locale][zoneText] then
-        zoneId = zones_by_name[locale][zoneText]
-    elseif zones_by_name[locale .. "-turtle"] and zones_by_name[locale .. "-turtle"][zoneText] then
-        zoneId = zones_by_name[locale .. "-turtle"][zoneText]
-    end
-    if not zoneId and zoneIdError[zoneText] == nil then
-        --MMM_PfDBHelper:Print("|cffff0000ERROR! GetZoneId - zoneId could not be retrieved for zoneName: '" .. tostring(zoneText) .. "'|r")
-        if zoneText then
-            zoneIdError[zoneText] = true
-        end
-    end
-    zoneIdCache[locale] = zoneIdCache[locale] or {}
-    zoneIdCache[locale][zoneText] = zoneId
-    return zoneId
+    return getId("zones", zoneText, locale)
+end
+
+function MMM_PfDBHelper:GetUnitId(unitText, locale)
+    return getId("units", unitText, locale)
 end
 
 function MMM_PfDBHelper:GetZoneName(zoneId, locale)
-    --self:Print("GetZoneName - zoneId: " .. tostring(zoneId) .. ", locale: " .. tostring(locale))
-    if zoneNameCache[locale] and zoneNameCache[locale][zoneId] ~= nil then return zoneNameCache[locale][zoneId] end
-    if not MMM_pfDB["zones"] then return nil end -- sanity checks
-    local zoneName = nil
-    if MMM_pfDB["zones"][locale] and MMM_pfDB["zones"][locale][zoneId] then
-        zoneName = MMM_pfDB["zones"][locale][zoneId]
-    elseif MMM_pfDB["zones"][locale .. "-turtle"] and MMM_pfDB["zones"][locale .. "-turtle"][zoneId] then
-        zoneName = MMM_pfDB["zones"][locale .. "-turtle"][zoneId]
-    end
-    if not zoneName and zoneNameError[zoneId] == nil then
-        --MMM_PfDBHelper:Print("|cffff0000ERROR! GetZoneName - zoneName could not be retrieved for zoneId: '" .. tostring(zoneId) .. "'|r")
-        if zoneId then
-            zoneNameError[zoneId] = true
-        end
-    end
-    zoneNameCache[locale] = zoneNameCache[locale] or {}
-    zoneNameCache[locale][zoneId] = zoneName
-    return zoneName
-end
-
-function MMM_PfDBHelper:GetUnitId(unitName, locale)
-    --self:Print("GetUnitId - unitName: " .. tostring(unitName) .. ", locale: " .. tostring(locale))
-    ensureUnitsLookupTable(locale)
-    if unitIdCache[locale] and unitIdCache[locale][unitName] ~= nil then return unitIdCache[locale][unitName] end
-    if not units_by_name then return nil end -- sanity checks
-    local unitId = nil
-    if units_by_name[locale] and units_by_name[locale][unitName] then
-        unitId = units_by_name[locale][unitName]
-    elseif units_by_name[locale .. "-turtle"] and units_by_name[locale .. "-turtle"][unitName] then
-        unitId = units_by_name[locale .. "-turtle"][unitName]
-    end
-    if not unitId and unitIdError[unitName] == nil then
-        --MMM_PfDBHelper:Print("|cffff0000ERROR! GetUnitId - unitId could not be retrieved for zoneName: '" .. tostring(unitName) .. "'|r")
-        if unitName then
-            unitIdError[zoneId] = true
-        end
-    end
-    unitIdCache[locale] = unitIdCache[locale] or {}
-    unitIdCache[locale][unitName] = unitId
-    return unitId
+    return getName("zones", zoneId, locale)
 end
 
 function MMM_PfDBHelper:GetUnitName(unitId, locale)
-    --self:Print("GetUnitName - unitId: " .. tostring(unitId) .. ", locale: " .. tostring(locale))
-    if unitNameCache[locale] and unitNameCache[locale][unitId] ~= nil then return unitNameCache[locale][unitId] end
-    if not MMM_pfDB["units"] then return nil end -- sanity checks
-    local unitName = nil
-    if MMM_pfDB["units"][locale] and MMM_pfDB["units"][locale][unitId] then
-        unitName = MMM_pfDB["units"][locale][unitId]
-    elseif MMM_pfDB["units"][locale .. "-turtle"] and MMM_pfDB["units"][locale .. "-turtle"][unitId] then
-        unitName = MMM_pfDB["units"][locale .. "-turtle"][unitId]
-    end
-    if not unitName and unitNameError[unitId] == nil then
-        --MMM_PfDBHelper:Print("|cffff0000ERROR! GetUnitName - unitName could not be retrieved for unitId: '" .. tostring(unitId) .. "'|r")
-        if unitId then
-            unitNameError[unitId] = true
-        end
-    end
-    unitNameCache[locale] = unitNameCache[locale] or {}
-    unitNameCache[locale][unitId] = unitName
-    return unitName
+    return getName("units", unitId, locale)
 end
