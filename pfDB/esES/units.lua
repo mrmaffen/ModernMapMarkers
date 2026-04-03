@@ -1,3 +1,15 @@
+local thisLocale = "esES"
+local localeSuffix = ""
+local tableKey = "units"
+
+if GetLocale() ~= thisLocale then return end
+
+thisLocale = thisLocale .. localeSuffix
+if pfDB and pfDB[tableKey] and pfDB[tableKey][thisLocale] then
+  MMM_pfDB[tableKey][thisLocale] = pfDB[tableKey][thisLocale]
+  return
+end
+
 MMM_pfDB["units"]["esES"] = {
   [1] = "Waypoint (Only GM can see it)",
   [2] = "Spawn Point (Only GM can see it)",

@@ -1,3 +1,13 @@
+local thisLocale = "enUS"
+local localeSuffix = "-turtle"
+local tableKey = "units"
+
+thisLocale = thisLocale .. localeSuffix
+if pfDB and pfDB[tableKey] and pfDB[tableKey][thisLocale] then
+  MMM_pfDB[tableKey][thisLocale] = pfDB[tableKey][thisLocale]
+  return
+end
+
 MMM_pfDB["units"]["enUS-turtle"] = {
   [4] = "Snowy Gryphon",
   [5] = "Ebon Gryphon",

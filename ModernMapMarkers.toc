@@ -3,7 +3,7 @@
 ## Author: tilr & Heallios
 ## Notes: Shows dungeon, raid, world boss, boat, zeppelin, and tram locations on the world map
 ## Version: 2.4
-## OptionalDeps: pfUI, pfQuest, InstanceJournal
+## OptionalDeps: pfUI, pfQuest, pfQuest-turtle, InstanceJournal
 ## SavedVariables: ModernMapMarkersDB
 
 pfDB\pfDB.xml

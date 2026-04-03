@@ -1,3 +1,15 @@
+local thisLocale = "esES"
+local localeSuffix = "-turtle"
+local tableKey = "zones"
+
+if GetLocale() ~= thisLocale then return end
+
+thisLocale = thisLocale .. localeSuffix
+if pfDB and pfDB[tableKey] and pfDB[tableKey][thisLocale] then
+  MMM_pfDB[tableKey][thisLocale] = pfDB[tableKey][thisLocale]
+  return
+end
+
 MMM_pfDB["zones"]["esES-turtle"] = {
   [2] = "Costa Larga",
   [4] = "Tierras Devastadas",

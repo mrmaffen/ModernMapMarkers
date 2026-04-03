@@ -1,3 +1,13 @@
+local thisLocale = "enUS"
+local localeSuffix = "-turtle"
+local tableKey = "zones"
+
+thisLocale = thisLocale .. localeSuffix
+if pfDB and pfDB[tableKey] and pfDB[tableKey][thisLocale] then
+  MMM_pfDB[tableKey][thisLocale] = pfDB[tableKey][thisLocale]
+  return
+end
+
 MMM_pfDB["zones"]["enUS-turtle"] = {
   [65] = "_",
   [296] = "South Seas",

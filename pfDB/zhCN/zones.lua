@@ -1,3 +1,15 @@
+local thisLocale = "zhCN"
+local localeSuffix = ""
+local tableKey = "zones"
+
+if GetLocale() ~= thisLocale then return end
+
+thisLocale = thisLocale .. localeSuffix
+if pfDB and pfDB[tableKey] and pfDB[tableKey][thisLocale] then
+  MMM_pfDB[tableKey][thisLocale] = pfDB[tableKey][thisLocale]
+  return
+end
+
 MMM_pfDB["zones"]["zhCN"] = {
   [1] = "丹莫罗",
   [2] = "长滩",
