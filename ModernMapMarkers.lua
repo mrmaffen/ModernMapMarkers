@@ -151,7 +151,9 @@ function MMM:BuildData()
                     type        = typeUpper,
                     mask        = m.mask,
                     description = m.info,
-                    id          = index
+                    id          = index,
+                    destContinentId = m.destContinentId,
+                    destZone = m.destZone
                 }
 
                 table.insert(MMM.Data, markerData)
@@ -304,6 +306,8 @@ function MMM:RefreshMarkers()
                 marker.markerType  = data.type
                 marker.continent   = data.continent
                 marker.zoneName    = data.zoneName
+                marker.destContinentId = data.destContinentId
+                marker.destZone    = data.destZone
 
                 marker:Show()
             end
@@ -345,28 +349,38 @@ end
 
 -- InstanceJournal Integration
 function MMM:OnMarkerClick(marker, button)
-    if not MMM.ijInstalled then return end
-
-    local instance = MMM:GetIJInstance(marker.nameEN)
-    if not instance then return end
+    local instance = nil
+    if MMM.ijInstalled then
+        instance = MMM:GetIJInstance(marker.nameEN)
+    end
 
     if button == "RightButton" then
-        -- Right-click: open IJ journal page
-        if not IJ_InstanceJournalFrame:IsShown() then
-            IJ_InstanceJournalFrame:Show()
+        if instance then
+            -- Right-click: open IJ journal page
+            if not IJ_InstanceJournalFrame:IsShown() then
+                IJ_InstanceJournalFrame:Show()
+            end
+            if instance.Type == IJLib.InstanceType.Raid then
+                IJ_ShowRaids = true
+                PanelTemplates_SetTab(IJ_InstanceJournalFrame, 2)
+            else
+                IJ_ShowRaids = false
+                PanelTemplates_SetTab(IJ_InstanceJournalFrame, 1)
+            end
+            IJ_ShowEncounter(instance)
+            WorldMapFrame:Hide()
         end
-        if instance.Type == IJLib.InstanceType.Raid then
-            IJ_ShowRaids = true
-            PanelTemplates_SetTab(IJ_InstanceJournalFrame, 2)
-        else
-            IJ_ShowRaids = false
-            PanelTemplates_SetTab(IJ_InstanceJournalFrame, 1)
-        end
-        IJ_ShowEncounter(instance)
-        WorldMapFrame:Hide()
     else
-        -- Left-click: navigate to instance submap
-        SetMapZoom(tonumber(instance.MapId), 1)
+        if marker.destContinentId and marker.destZone then -- we have a transport marker
+            local zoneIndex = MMM:GetZoneIndex(marker.destContinentId, marker.destZone)
+            if zoneIndex > 0 then
+                SetMapZoom(marker.destContinentId, zoneIndex)
+                return
+            end
+        elseif instance then
+            -- Left-click: navigate to instance submap
+            SetMapZoom(tonumber(instance.MapId), 1)
+        end
     end
 end
 

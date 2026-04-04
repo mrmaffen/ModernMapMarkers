@@ -14,25 +14,25 @@ ModernMapMarkers_Points = {
             { x=0.385,   y=0.34,   name="Timbermaw Hold", type="raid", info="60" },
         },
         ["Darkshore"] = {
-            { x=0.324, y=0.44,  name="Stormwind City",        type="boat", info="Alliance" },
-            { x=0.304, y=0.41,  name="Alah'Thalas",      type="boat", info="Alliance" },
-            { x=0.333, y=0.399, name="Rut'theran Village", type="boat", info="Alliance" },
+            { x=0.324, y=0.44,  name="Stormwind City", destContinentId=2, destZone="Stormwind City", type="boat", info="Alliance" },
+            { x=0.304, y=0.41,  name="Alah'Thalas", destContinentId=2, destZone="Alah'Thalas", type="boat", info="Alliance" },
+            { x=0.333, y=0.399, name="Rut'theran Village", destContinentId=1, destZone="Teldrassil", type="boat", info="Alliance" },
         },
         ["Desolace"] = {
             { x=0.29, y=0.629, name="Maraudon", type="dungeon",   info="46-55" },
             { x=0.82, y=0.80,  name="Concavius", type="worldboss", info="60" },
-            { x=0.205, y=0.75, name="Moonhoof Village", type="boat", info="Horde" },
+            { x=0.205, y=0.75, name="Moonhoof Village", destContinentId=1, destZone="Moonwhisper Coast", type="boat", info="Horde" },
         },
         ["Durotar"] = {
-            { x=0.508, y=0.15, name="Undercity", type="zepp", info="Horde" },
-            { x=0.505, y=0.124, name="Grom'gol Base Camp", type="zepp", info="Horde" },
-            { x=0.412, y=0.195, name="Thunder Bluff", type="zepp", info="Horde" },
-            { x=0.413, y=0.165, name="Kargath", type="zepp", info="Horde" },
-            { x=0.598, y=0.236, name="Revantusk Village",     type="boat", info="Horde" },
+            { x=0.508, y=0.15, name="Undercity", destContinentId=2, destZone="Tirisfal Glades", type="zepp", info="Horde" },
+            { x=0.505, y=0.124, name="Grom'gol Base Camp", destContinentId=2, destZone="Stranglethorn Vale", type="zepp", info="Horde" },
+            { x=0.412, y=0.195, name="Thunder Bluff", destContinentId=1, destZone="Thunder Bluff", type="zepp", info="Horde" },
+            { x=0.413, y=0.165, name="Kargath", destContinentId=2, destZone="Badlands", type="zepp", info="Horde" },
+            { x=0.598, y=0.236, name="Revantusk Village", destContinentId=2, destZone="The Hinterlands", type="boat", info="Horde" },
         },
         ["Dustwallow Marsh"] = {
             { x=0.53,  y=0.76,  name="Onyxia's Lair",         type="raid", info="60" },
-            { x=0.718, y=0.566, name="Menethil Harbor", type="boat", info="Alliance" },
+            { x=0.718, y=0.566, name="Menethil Harbor", destContinentId=2, destZone="Wetlands", type="boat", info="Alliance" },
         },
         ["Feralas"] = {
             { x=0.648, y=0.303, name="Dire Maul", mask="%s - East", type="dungeon", info="55-58" },
@@ -48,7 +48,7 @@ ModernMapMarkers_Points = {
         },
         ["Moonwhisper Coast"] = {
             { x=0.506,   y=0.959,   name="Timbermaw Hold", type="raid", info="60" },
-            { x=0.71, y=0.38, name="Shadowprey Village", type="boat", info="Horde" },
+            { x=0.71, y=0.38, name="Shadowprey Village", destContinentId=1, destZone="Desolace", type="boat", info="Horde" },
         },
         ["Orgrimmar"] = {
             { x=0.53, y=0.486, name="Ragefire Chasm", type="dungeon", info="13-18" },
@@ -63,7 +63,7 @@ ModernMapMarkers_Points = {
             { x=0.361, y=0.762, name="Ostarius",     type="worldboss", info="60" },
         },
         ["Teldrassil"] = {
-            { x=0.552, y=0.949, name="Auberdine", type="boat", info="Alliance" },
+            { x=0.552, y=0.949, name="Auberdine", destContinentId=1, destZone="Darkshore", type="boat", info="Alliance" },
         },
         ["Thousand Needles"] = {
             { x=0.648, y=0.460, name="Windhorn Canyon", type="dungeon", info="26-30" },
@@ -72,20 +72,20 @@ ModernMapMarkers_Points = {
             { x=0.488, y=0.919, name="Razorfen Downs",  type="dungeon", info="37-46" },
             { x=0.407, y=0.873, name="Razorfen Kraul",  type="dungeon", info="29-38" },
             { x=0.462, y=0.357, name="Wailing Caverns", type="dungeon", info="17-24" },
-            { x=0.644, y=0.388, name="Booty Bay", type="boat",  info="Neutral" },
+            { x=0.644, y=0.388, name="Booty Bay", destContinentId=2, destZone="Stranglethorn Vale", type="boat",  info="Neutral" },
         },
         ["Thunder Bluff"] = {
-            { x=0.165, y=0.230, name="Orgrimmar", type="zepp", info="Horde" },
+            { x=0.165, y=0.230, name="Orgrimmar", destContinentId=1, destZone="Durotar", type="zepp", info="Horde" },
         },
     },
     [2] = { -- Eastern Kingdoms
         ["Alah'Thalas"] = {
-            { x=0.531, y=0.047, name="Auberdine", type="boat", info="Alliance" },
+            { x=0.531, y=0.047, name="Auberdine", destContinentId=1, destZone="Darkshore", type="boat", info="Alliance" },
         },
         ["Badlands"] = {
             { x=0.429, y=0.130, name="Uldaman", mask="%s - Main Entrance", type="dungeon", info="41-51" },
             { x=0.657, y=0.438, name="Uldaman", mask="%s - Back Entrance", type="dungeon", info="41-51" },
-            { x=0.075, y=0.480, name="Orgrimmar",   type="zepp",    info="Horde" },
+            { x=0.075, y=0.480, name="Orgrimmar", destContinentId=1, destZone="Durotar",   type="zepp",    info="Horde" },
         },
         ["Balor"] = {
             { x=0.57,  y=0.598, name="Stormwrought Ruins",               type="dungeon", info="35-41" },
@@ -128,7 +128,7 @@ ModernMapMarkers_Points = {
             { x=0.30, y=0.27, name="Gilneas City", type="dungeon", info="43" },
         },
         ["Ironforge"] = {
-            { x=0.762, y=0.511, name="Stormwind City", type="tram", info="Alliance" },
+            { x=0.762, y=0.511, name="Stormwind City", destContinentId=2, destZone="Stormwind City", type="tram", info="Alliance" },
         },
         ["Searing Gorge"] = {
             { x=0.371, y=0.857, name="Blackrock Depths",      type="dungeon", info="52-60" },
@@ -143,29 +143,29 @@ ModernMapMarkers_Points = {
         ["Stormwind City"] = {
             { x=0.51,  y=0.675, name="The Stockade",    type="dungeon", info="24-31" },
             { x=0.63,  y=0.58,  name="Stormwind Vault", type="dungeon", info="60" },
-            { x=0.694, y=0.294, name="Ironforge", type="tram",  info="Alliance" },
-            { x=0.218, y=0.563, name="Auberdine", type="boat",  info="Alliance" },
+            { x=0.694, y=0.294, name="Ironforge", destContinentId=2, destZone="Ironforge", type="tram",  info="Alliance" },
+            { x=0.218, y=0.563, name="Auberdine", destContinentId=1, destZone="Darkshore", type="boat",  info="Alliance" },
         },
         ["Stranglethorn Vale"] = {
             { x=0.53,  y=0.172, name="Zul'Gurub",                   type="raid", info="60" },
-            { x=0.259, y=0.731,  name="Ratchet",             type="boat", info="Neutral" },
-            { x=0.310, y=0.280, name="Undercity", type="zepp", info="Horde" },
-            { x=0.308, y=0.304, name="Orgrimmar", type="zepp", info="Horde" },
+            { x=0.259, y=0.731,  name="Ratchet", destContinentId=1, destZone="The Barrens",             type="boat", info="Neutral" },
+            { x=0.310, y=0.280, name="Undercity", destContinentId=2, destZone="Tirisfal Glades", type="zepp", info="Horde" },
+            { x=0.308, y=0.304, name="Orgrimmar", destContinentId=1, destZone="Durotar", type="zepp", info="Horde" },
         },
         ["Swamp of Sorrows"] = {
             { x=0.701, y=0.55, name="Sunken Temple", type="dungeon", info="50-60" },
         },
         ["The Hinterlands"] = {
             { x=0.632, y=0.217, name="Ysondre", type="worldboss", info="60" },
-            { x=0.812, y=0.794, name="Sparkwater Port",             type="boat",      info="Horde" },
+            { x=0.812, y=0.794, name="Sparkwater Port", destContinentId=1, destZone="Durotar",             type="boat",      info="Horde" },
         },
         ["Tirisfal Glades"] = {
             { x=0.869, y=0.323, name="Scarlet Monastery", mask="%s - Armory", type="dungeon", info="32-42" },
             { x=0.862, y=0.295, name="Scarlet Monastery", mask="%s - Cathedral", type="dungeon", info="35-45" },
             { x=0.839, y=0.283, name="Scarlet Monastery", mask="%s - Graveyard", type="dungeon", info="26-36" },
             { x=0.850, y=0.338, name="Scarlet Monastery", mask="%s - Library", type="dungeon", info="29-39" },
-            { x=0.595, y=0.575, name="Orgrimmar", type="zepp", info="Horde" },
-            { x=0.615, y=0.575, name="Grom'gol Base Camp", type="zepp", info="Horde" },
+            { x=0.595, y=0.575, name="Orgrimmar", destContinentId=1, destZone="Durotar", type="zepp", info="Horde" },
+            { x=0.615, y=0.575, name="Grom'gol Base Camp", destContinentId=2, destZone="Stranglethorn Vale", type="zepp", info="Horde" },
         },
         ["Western Plaguelands"] = {
             { x=0.69, y=0.74, name="Scholomance", type="dungeon", info="58-60" },
@@ -175,7 +175,7 @@ ModernMapMarkers_Points = {
         },
         ["Wetlands"] = {
             { x=0.67,  y=0.634, name="Dragonmaw Retreat",    type="dungeon", info="27-33" },
-            { x=0.068, y=0.613, name="Theramore Isle", type="boat",  info="Alliance" },
+            { x=0.068, y=0.613, name="Theramore Isle", destContinentId=1, destZone="Dustwallow Marsh", type="boat",  info="Alliance" },
         },
     }
 }
