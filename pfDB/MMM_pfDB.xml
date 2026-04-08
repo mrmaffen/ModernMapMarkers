@@ -1,0 +1,12 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Include file="deDE\units_filtered.lua"/>
+    <Include file="deDE\zones_filtered.lua"/>
+    <Include file="enUS\units_filtered.lua"/>
+    <Include file="enUS\zones_filtered.lua"/>
+    <Include file="esES\units_filtered.lua"/>
+    <Include file="esES\zones_filtered.lua"/>
+    <Include file="ptBR\units_filtered.lua"/>
+    <Include file="ptBR\zones_filtered.lua"/>
+    <Include file="zhCN\units_filtered.lua"/>
+    <Include file="zhCN\zones_filtered.lua"/>
+</Ui>

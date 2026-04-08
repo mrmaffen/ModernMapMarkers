@@ -30,17 +30,6 @@ local function ensureLookupTable(kind, locale)
         end
     end
 
-    -- turtle-specific locale (e.g. "enUS-turtle" or "deDE-turtle")
-    local turtle_locale = locale .. "-turtle"
-    if db[turtle_locale] then
-        by_name[kind][turtle_locale] = by_name[kind][turtle_locale] or {}
-        for id, name in pairs(db[turtle_locale]) do
-            if type(name) == "string" then
-                by_name[kind][turtle_locale][name] = id
-            end
-        end
-    end
-
     initialized[kind][locale] = true
 end
 
@@ -56,16 +45,11 @@ local function getId(kind, text, locale)
     local found = nil
     if by_name[kind][locale] and by_name[kind][locale][text] then
         found = by_name[kind][locale][text]
-    else
-        local turtle_locale = locale .. "-turtle"
-        if by_name[kind][turtle_locale] and by_name[kind][turtle_locale][text] then
-            found = by_name[kind][turtle_locale][text]
-        end
     end
 
     if not found and idError[kind][text] == nil then
         idError[kind][text] = true
-        --MMM_PfDBHelper:Print("ERROR getId - kind="..tostring(kind).." text="..tostring(text))
+        --MMM_PfDBHelper:Print("ERROR getId - kind = " .. tostring(kind) .. ", text = '" .. tostring(text) .. "'")
     end
 
     idCache[kind][locale][text] = found or false
@@ -84,16 +68,11 @@ local function getName(kind, id, locale)
     local db = MMM_pfDB and MMM_pfDB[kind]
     if db[locale] and db[locale][id] then
         found = db[locale][id]
-    else
-        local turtle_locale = locale .. "-turtle"
-        if db[turtle_locale] and db[turtle_locale][id] then
-            found = db[turtle_locale][id]
-        end
     end
 
     if not found and nameError[kind][id] == nil then
         nameError[kind][id] = true
-        --MMM_PfDBHelper:Print("ERROR getName - kind="..tostring(kind).." id="..tostring(id))
+        --MMM_PfDBHelper:Print("ERROR getName - kind = " .. tostring(kind) .. ", id = " .. tostring(id))
     end
 
     nameCache[kind][locale][id] = found or false

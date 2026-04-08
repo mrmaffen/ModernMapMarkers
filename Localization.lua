@@ -38,7 +38,7 @@ function ModernMapMarkers_Locale:GetEnglishZoneName(localizedName)
         return localizedName
     end
     local zoneName = MMM_PfDBHelper:GetZoneName(zoneId, "enUS")
-    --self:Print("GetEnglishZoneName - localizedName: " .. tostring(localizedName) .. " --> " .. tostring(zoneName))
+    --self:Print("GetEnglishZoneName - localizedName: '" .. tostring(localizedName) .. "' --> '" .. tostring(zoneName) .. "'(id:" .. zoneId .. ")")
     return zoneName
 end
 
@@ -50,7 +50,7 @@ function ModernMapMarkers_Locale:GetLocalizedZoneName(englishName)
         return englishName
     end
     local zoneName = MMM_PfDBHelper:GetZoneName(zoneId, detectedLocale)
-    --self:Print("GetLocalizedZoneName - englishName: " .. tostring(englishName) .. " --> " .. tostring(zoneName))
+    --self:Print("GetLocalizedZoneName - englishName: '" .. tostring(englishName) .. "' --> '" .. tostring(zoneName) .. "'(id:" .. zoneId .. ")")
     return zoneName
 end
 
