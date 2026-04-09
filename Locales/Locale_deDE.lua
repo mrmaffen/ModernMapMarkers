@@ -29,7 +29,8 @@ ModernMapMarkers_Locale:RegisterDictionary("deDE", {
     ["Boat to Theramore Isle"]         = "Schiff zur Insel Theramore",
     ["Boat to Sparkwater Port"]        = "Schiff zum Funkelwasserhafen",
     ["Boat to The Forgotten Coast"]    = "Schiff zur Vergessenen Küste",
-    ["Boat to Sardor-Island"]          = "Schiff zur Insel Sardor",
+    ["Boat to Sardor Isle"]            = "Schiff zur Insel Sardor",
+    ["Boat to Revantusk Village"]      = "Schiff zum Dorf der Bruchhauer",
     ["Zeppelin to Grom'gol Base Camp"] = "Zeppelin zum Basislager von Grom'gol",
 
     -- Tooltip labels
