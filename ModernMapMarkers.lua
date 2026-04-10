@@ -105,11 +105,11 @@ local HIGHLIGHT_MAP = {
     RAID      = TEX_BASE .. "raid-highlight.tga",
 }
 
--- Zone name cache
-local ZONE_CACHE = {}
+-- Zone name cache. Directly from the client, so they are localized in the client's language.
+local LOCALIZED_ZONE_CACHE = {}
 function MMM:CacheZones()
-    ZONE_CACHE[1] = { GetMapZones(1) } -- Kalimdor
-    ZONE_CACHE[2] = { GetMapZones(2) } -- Eastern Kingdoms
+    LOCALIZED_ZONE_CACHE[1] = { GetMapZones(1) } -- Kalimdor
+    LOCALIZED_ZONE_CACHE[2] = { GetMapZones(2) } -- Eastern Kingdoms
 end
 
 -- Map multi-entrance dungeons to a single zone
@@ -227,7 +227,7 @@ function MMM:RefreshMarkers()
         return
     end
 
-    local zoneNames      = ZONE_CACHE[currentContinent]
+    local zoneNames      = LOCALIZED_ZONE_CACHE[currentContinent]
     local currentZoneName = zoneNames and zoneNames[currentZone]
     if not currentZoneName then
         self:HideAllMarkers()
@@ -452,8 +452,8 @@ function ModernMapMarkers_SetFactionFilter(factionStr)
 end
 
 function MMM:GetZoneIndex(continentID, zoneName)
-    local zones = ZONE_CACHE[continentID] or {}
-    -- zoneName is English (from MarkerData), ZONE_CACHE has localized names
+    local zones = LOCALIZED_ZONE_CACHE[continentID] or {}
+    -- zoneName is English (from MarkerData), LOCALIZED_ZONE_CACHE has localized names
     local localizedName = L:GetLocalizedZoneName(zoneName)
     for i, name in ipairs(zones) do
         if name == localizedName then return i end
