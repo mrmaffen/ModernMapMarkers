@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Include file="deDE\zones_filtered_fixes.lua"/>
+    <Include file="enUS\zones_filtered_fixes.lua"/>
+    <Include file="esES\zones_filtered_fixes.lua"/>
+    <Include file="ptBR\zones_filtered_fixes.lua"/>
+    <Include file="zhCN\zones_filtered_fixes.lua"/>
+</Ui>
